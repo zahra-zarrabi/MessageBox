@@ -23,8 +23,6 @@ class Main(QWidget):
 
         self.ui.setWindowTitle("Message")
         self.ui.setWindowIcon(QtGui.QIcon('message.png'))
-        # scrollArea = QScrollArea()
-        # self.ui.gridLayout_message.addWidget(scrollArea)
 
         self.ui.show()
 
@@ -36,10 +34,6 @@ class Main(QWidget):
         self.ui.btn_delete.clicked.connect(self.removeallmessage)
         self.read_message()
         self.ui.btn_dark.clicked.connect(self.my_dark)
-        # scrollArea = QScrollArea()
-        # self.ui.gridLayout_message.addWidget(scrollArea)
-        # self.ui.scroll()
-        # if self.ui.btn.clicked.connect(self.removemessage):
         self.start_time = time.time()
 
     def read_message(self):
@@ -52,7 +46,6 @@ class Main(QWidget):
             label_1.setStyleSheet('color:red')
             self.ui.gridLayout_messagee.addWidget(label_1,i,1)
 
-
             label = QLabel()
             label.setText(message[3])
             label.setStyleSheet('color:red')
@@ -60,22 +53,27 @@ class Main(QWidget):
 
             btn=QPushButton()
             btn.setIcon(QtGui.QIcon('images.jpeg'))
-
             btn.clicked.connect(partial(self.removemessage,btn,message[0],label,label_1))
-
             self.ui.gridLayout_messagee.addWidget(btn,i,0)
 
     def addnewmessage(self):
         name = self.ui.lineEdit_name.text()
         text = self.ui.lineEdit_message.text()
-        time = '{0:20%y-%m-%d \n %H:%M}'.format(datetime.now())
+        time = '{0:20%y-%m-%d \n%H:%M}'.format(datetime.now())
         messages = Database.my_select()
-        print('f', messages[0][3])
         for message in messages:
             id = message[0]
-            # if name == message[1] and
+            if name == message[1]:
 
-        if name !="" and text !="":
+                time_1 = int(message[3].split('\n')[1][:2])
+                time_2 = int(time.split('\n')[1][:2])
+                print('same', time_2, time_1)
+                if abs(time_2 - time_1) < 1:
+                    msg_box = QMessageBox()
+                    msg_box.setText('you can add one hour later')
+                    msg_box.exec_()
+                    return None
+        if name != "" and text != "":
             response=Database.my_insert(name,text)
             if response==True:
                 label = QLabel()
@@ -90,7 +88,7 @@ class Main(QWidget):
 
                 btn = QPushButton()
                 btn.setIcon(QtGui.QIcon('images.jpeg'))
-                btn.clicked.connect(partial(self.removemessage,btn,id,label,label_1))
+                btn.clicked.connect(partial(self.removemessage,btn,label,label_1))
                 self.ui.gridLayout_messagee.addWidget(btn, self.row, 0)
                 self.row += 1
 
@@ -115,30 +113,16 @@ class Main(QWidget):
             item = self.ui.gridLayout_messagee.takeAt(0)
             widget = item.widget()
             widget.deleteLater()
-        # if self.ui.gridLayout_message.count() > 2:
-        #     while self.ui.gridLayout_m
-        print('za')
-        # self.ui.gridLayout_message.
-        print('z')
-        # self.read_message()
-        # self.ui.gridLayout_message.item().widget().deleteLater()
-        # if response == True:
-        #     btn
+
     def removemessage(self,btn,i,label,label_1):
-        x=Database.my_delete(i)
-        if x:
+        response=Database.my_delete(i)
+        if response:
             btn.hide()
             label.hide()
             label_1.hide()
             msg_box = QMessageBox()
             msg_box.setText('Deleted.')
             msg_box.exec_()
-
-        # x=Database.my_select()
-        # print(x)
-        # self.read_message()
-        # self.ui.gridLayout_message.item(i).widget().deleteLater()
-
 
     def my_dark(self):
         if not self.dark:
@@ -155,7 +139,7 @@ if __name__ == "__main__":
     window = Main()
 
     from PySide6.QtCore import QFile,QTextStream
-    # app = QApplication(sys.argv)
+
     file=QFile(":/dark.qss")
     file.open(QFile.ReadOnly | QFile.Text)
     stream=QTextStream(file)

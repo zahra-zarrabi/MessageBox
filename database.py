@@ -8,7 +8,7 @@ class Database:
         try:
             my_con = connect("MessageBox.db")
             my_cursor = my_con.cursor()
-            time='{0:20%y-%m-%d \n %H:%M}'.format(datetime.now())
+            time='{0:20%y-%m-%d \n%H:%M}'.format(datetime.now())
             my_cursor.execute(f"INSERT INTO messages(name,text,time)VALUES('{name}','{text}','{time}')")
             my_con.commit()
             my_cursor.close()
