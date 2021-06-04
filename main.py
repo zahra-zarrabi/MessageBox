@@ -62,7 +62,7 @@ class Main(QWidget):
         time = '{0:20%y-%m-%d \n%H:%M}'.format(datetime.now())
         messages = Database.my_select()
         for message in messages:
-            id = message[0]
+        #     id = message[0]
             if name == message[1]:
 
                 time_1 = int(message[3].split('\n')[1][:2])
@@ -75,7 +75,7 @@ class Main(QWidget):
                     return None
         if name != "" and text != "":
             response=Database.my_insert(name,text)
-            if response==True:
+            if response[0]==True:
                 label = QLabel()
                 label.setText(name + ":" + text)
                 label.setStyleSheet('color:red')
@@ -88,7 +88,7 @@ class Main(QWidget):
 
                 btn = QPushButton()
                 btn.setIcon(QtGui.QIcon('images.jpeg'))
-                btn.clicked.connect(partial(self.removemessage,btn,label,label_1))
+                btn.clicked.connect(partial(self.removemessage,btn,response[1],label,label_1))
                 self.ui.gridLayout_messagee.addWidget(btn, self.row, 0)
                 self.row += 1
 

@@ -10,9 +10,10 @@ class Database:
             my_cursor = my_con.cursor()
             time='{0:20%y-%m-%d \n%H:%M}'.format(datetime.now())
             my_cursor.execute(f"INSERT INTO messages(name,text,time)VALUES('{name}','{text}','{time}')")
+            id=my_cursor.lastrowid
             my_con.commit()
             my_cursor.close()
-            return True
+            return True, id
         except:
             return False
 
@@ -47,7 +48,3 @@ class Database:
         my_cursor.execute("DELETE FROM messages")
         my_con.commit()
         my_cursor.close()
-
-    @staticmethod
-    def my_update(self):
-        pass
