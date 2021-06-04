@@ -62,9 +62,7 @@ class Main(QWidget):
         time = '{0:20%y-%m-%d \n%H:%M}'.format(datetime.now())
         messages = Database.my_select()
         for message in messages:
-        #     id = message[0]
             if name == message[1]:
-
                 time_1 = int(message[3].split('\n')[1][:2])
                 time_2 = int(time.split('\n')[1][:2])
                 print('same', time_2, time_1)
@@ -137,13 +135,5 @@ class Main(QWidget):
 if __name__ == "__main__":
     app = QApplication([])
     window = Main()
-
-    from PySide6.QtCore import QFile,QTextStream
-
-    file=QFile(":/dark.qss")
-    file.open(QFile.ReadOnly | QFile.Text)
-    stream=QTextStream(file)
-
-    app.setStyleSheet(stream.readAll())
     # window.show()
     sys.exit(app.exec_())
